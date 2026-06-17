@@ -40,6 +40,7 @@ def list_users():
     return {
         "status":200,
         "message":"Users List Retrived Sucessfully!",
+        "count": len(users),
         "data":users
     }
     
@@ -59,7 +60,7 @@ def get_users(user_id:int):
         "message": "User Not Found!"
     }
     
-#update_the_uyser
+#update_the_user
 @app.put("/users/{user_id}")
 def update_user(user_id:int,user:User):
     for index,existing_user in enumerate(users):
@@ -75,3 +76,21 @@ def update_user(user_id:int,user:User):
                 "status" : False,
                 "message" : "User Not Found"
             }
+            
+    
+#delete user
+@app.delete("/users/{user_id}")
+def delete_user(user_id:int):
+    for index, user in enumerate(users):
+        if user["id"] == user_id:
+            deleted_user = users.pop(index)
+            return {
+                "status": True,
+                "message": "User Deleted Sucessfully!",
+                "data": deleted_user
+            }
+            
+        return {
+            "status": False,
+            "Message" : "User Not Found!"
+        }
