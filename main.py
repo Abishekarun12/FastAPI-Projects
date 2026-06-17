@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Body,Form,UploadFile,File
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -94,3 +94,34 @@ def delete_user(user_id:int):
             "status": False,
             "Message" : "User Not Found!"
         }
+        
+        
+        
+#form inputs
+@app.post("/form")
+def form_input(user_name: str = Form(...),password : str = Form(...)):
+    return {
+        "type": "Form Data",
+        "message": "Data Retrived Sucessfully!",
+        "data": {
+            "user_name" : user_name,
+            "password" : password
+        }
+    }
+    
+@app.post("/body")
+def body_input(content: str = Body(...,media_type="text/plain")):
+    return {
+        "type" : "Body Input",
+        "message" : "Body Data Retrived",
+        "data": content
+    }
+    
+#File Upload
+@app.post("/file_upload")
+def upload_file(file: UploadFile = File(...)):
+    return {
+        "message" : "File Upload Sucessfully",
+        "File Name" : file.filename,
+        "Type" : file.content_type
+    }
